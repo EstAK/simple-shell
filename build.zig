@@ -7,7 +7,10 @@ pub fn build(b: *std.Build) void {
     });
     exe.linkLibC();
     exe.addCSourceFiles(.{
-        .files = &.{"src/main.c"},
+        .files = &.{
+            "src/main.c",
+            "src/tokenizer/tokenizer.c",
+        },
     });
     b.installArtifact(exe);
     const run_exe = b.addRunArtifact(exe);
