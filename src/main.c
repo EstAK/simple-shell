@@ -1,5 +1,7 @@
 #include "constants.h"
 #include "tokenizer/tokenizer.h"
+#include "interperter/interpreter.h"
+
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
