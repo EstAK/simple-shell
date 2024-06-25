@@ -1,6 +1,6 @@
 #include "constants.h"
 #include "tokenizer/tokenizer.h"
-#include "interperter/interpreter.h"
+#include "interpreter/interpreter.h"
 
 #include <pwd.h>
 #include <stdio.h>

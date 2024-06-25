@@ -10,6 +10,7 @@ pub fn build(b: *std.Build) void {
         .files = &.{
             "src/main.c",
             "src/tokenizer/tokenizer.c",
+            "src/interpreter/interpreter.c",
         },
     });
     b.installArtifact(exe);

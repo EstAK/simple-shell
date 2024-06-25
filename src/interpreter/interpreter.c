@@ -3,9 +3,10 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Node *initialize_node(const char *canonical_name, const char *path) {
-    Node *node = malloc(sizeof(*Node));
+    Node *node = malloc(sizeof(Node *));
     node->canonical_name = canonical_name;
     node->path = path;
 
@@ -13,7 +14,7 @@ Node *initialize_node(const char *canonical_name, const char *path) {
 }
 
 ProgramTree *initialize_tree(const char *root_name, const char *root_path) {
-    ProgramTree *tree = malloc(sizeof(*ProgramTree));
+    ProgramTree *tree = malloc(sizeof(ProgramTree *));
     tree->root->canonical_name = root_name;
     tree->root->path = root_path;
 
@@ -21,18 +22,28 @@ ProgramTree *initialize_tree(const char *root_name, const char *root_path) {
 }
 
 // can return NULL if the program failed to open the directory
-ProgramForest *initialize_forest(const char *programs_directory) {
-    ProgramForest *forest = malloc(sizeof(*ProgramForest));
-
-    DIR *d;
-    struct dirent dir;
-    if ((d = opendir(programs_directory))) {
-        while ((dir = readdir(d)) != NULL) {
-            printf("%s\n", dir->d_name);
-        }
-    } else {
+ProgramForest *initialize_forest(const char *programs_directory, const char *cwd) {
+    ProgramForest *forest = malloc(sizeof(ProgramForest *));
+    DIR *d = opendir(programs_directory);
+    if (d == NULL)
         return NULL;
+
+    struct dirent *dir;
+    char temp[1024] = {0};
+    // this is kind of dumb as the path will always be relative and never absolute
+
+    strcat(temp, cwd);
+    strcat(temp, "/");
+    strcat(temp, programs_directory);
+    strcat(temp, "/");
+    const unsigned int current = strlen(temp);
+
+    while ((dir = readdir(d)) != NULL) {
+        memcpy(temp+current, dir->d_name, strlen(dir->d_name));
+        temp[strlen(dir->d_name) + current] = '\0';
+        printf("%s\n", temp);
     }
+    return forest;
 }
 
 int add_program(const char *canonical_name, const char *path);
